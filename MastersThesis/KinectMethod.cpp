@@ -7,8 +7,8 @@
  */
 
 /* ヘッダファイルのインクルード */
-#include "stdafx.h"
-//#include "3DPathTrackingUsingtheKINECT.hpp" //ヘッダファイルのインクルード
+//#include "stdafx.h"
+#include "3DPathTrackingUsingtheKINECT.hpp" //ヘッダファイルのインクルード
 #include "KinectMethod.hpp"
 
 /*!
