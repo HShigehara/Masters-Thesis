@@ -8,7 +8,7 @@
 
 /* */
 #include "stdafx.h"
-#include "3DPathTrackingUsingtheKINECT.hpp"
+//#include "3DPathTrackingUsingtheKINECT.hpp"
 #include "System.hpp"
 
 /*!

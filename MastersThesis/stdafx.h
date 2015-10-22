@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-
+/* よく利用するヘッダーをプリコンパイルする */
+#include "3DPathTrackingUsingtheKINECT.hpp" //ヘッダファイルのインクルード
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。

@@ -7,7 +7,7 @@
 */
 
 #include "stdafx.h"
-#include "3DPathTrackingUsingtheKINECT.hpp" //ヘッダファイルのインクルード
+//#include "3DPathTrackingUsingtheKINECT.hpp" //ヘッダファイルのインクルード
 
 void onMouse(int event, int x, int y, int flags, void* param)
 {
