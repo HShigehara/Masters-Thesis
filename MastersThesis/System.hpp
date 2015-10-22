@@ -29,7 +29,7 @@ public:
 	int alternatives(); //!<数字の入力をチェックする
 	void openDirectory(); //!<ディレクトリを開く(c38)
 	void outputAllData(char* outputDataName, outputData* outputData, int countDataNum); //!<データをファイルに書き出すメソッド(c41)
-	void loadInternalCameraParameter(string cameraParamFile); //!<カメラキャリブレーションによって得られたパラメータを適用する(c54)
+	void loadInternalCameraParameter(char* cameraParamFile); //!<カメラキャリブレーションによって得られたパラメータを適用する(c54)
 
 	Mat internalCameraParam; //!<カメラキャリブレーションによって得られた内部パラメータ行列(c54)
 	Mat distortionCoefficients; //!<カメラキャリブレーションによって得られた歪み係数行列(c54)

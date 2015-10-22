@@ -7,7 +7,6 @@
  */
 
 /* ヘッダファイルのインクルード */
-//#include "stdafx.h"
 #include "3DPathTrackingUsingtheKINECT.hpp"
 #include "KinectMethod.hpp"
 #include "ImageProcessingMethod.hpp"
@@ -101,7 +100,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		char* outputVideoName = "video.avi"; //計測中の動画ファイル名(c39)
 
 		//xmlファイルの読み込み
-		string cameraParameterName = "cameraparam.xml"; //カメラキャリブレーションによって得られたファイル名(c54)
+		char* cameraParameterName = "cameraParam.xml"; //カメラキャリブレーションによって得られたファイル名(c54)
 		sys.loadInternalCameraParameter(cameraParameterName); //カメラパラメータを読み込む(c54)
 		Mat undistort_img;
 
@@ -134,8 +133,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		kinect.initialize(); //Kinectの初期化
 
 		namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE | CV_WINDOW_FREERATIO); //動画像用のウインドウを表示(c31)
-
-		namedWindow("test", CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO);
+		namedWindow("歪み補正後", CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO);
 
 		while (1){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．
 			//(c25)
@@ -153,8 +151,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			kinect.drawRGBImage(image); //RGBカメラの処理
 			
 			//歪み補正後の画像に対して処理を行うようにする
-			//undistort(image, undistort_img, sys.internalCameraParam, sys.distortionCoefficients, Mat()); //歪み補正後の画像で上書き(c54)
-			//imshow("test", undistort_img);
+			undistort(image, undistort_img, sys.internalCameraParam, sys.distortionCoefficients, Mat()); //歪み補正後の画像で上書き(c54)
+			imshow("歪み補正後", undistort_img);
 			//image = undistort_img.clone();
 
 			//画像を表示

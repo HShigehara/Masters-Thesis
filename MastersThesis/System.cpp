@@ -7,7 +7,6 @@
 */
 
 /* */
-//#include "stdafx.h"
 #include "3DPathTrackingUsingtheKINECT.hpp"
 #include "System.hpp"
 
@@ -87,18 +86,16 @@ void System::makeDirectory()
 
 /*!
 * @brief System::removeDirectory().ディレクトリを削除(c21)
-* @param cNum
+* @param なし 
 * @return なし
 */
-void System::removeDirectory(/*int cNum*/)
+void System::removeDirectory()
 {
-	//if (cNum == 0){
-		char rmdirCommand[NOC]; //ディレクトリを削除するコマンド(c21).変数名を変更&このメソッドのみで有効な変数(c30)
-		//ディレクトリを削除する
-		sprintf_s(rmdirCommand, "rmdir /s /q %s", directoryName);
-		system(rmdirCommand);
-		cout << "Not Save.\n" << endl;
-	//}
+	char rmdirCommand[NOC]; //ディレクトリを削除するコマンド(c21).変数名を変更&このメソッドのみで有効な変数(c30)
+	//ディレクトリを削除する
+	sprintf_s(rmdirCommand, "rmdir /s /q %s", directoryName);
+	system(rmdirCommand);
+	cout << "Not Save.\n" << endl;
 
 	return;
 }
@@ -135,8 +132,8 @@ int System::alternatives()
 }
 
 /*!
-* @brief System::openDireectory(int cNum).出力したディレクトリを開く(c39)
-* @param checkNum
+* @brief System::openDireectory().出力したディレクトリを開く(c39)
+* @param なし
 * @return なし
 */
 void System::openDirectory()
@@ -151,7 +148,7 @@ void System::openDirectory()
 
 /*!
 * @brief System::outputData().データをファイルに書き出すメソッド(c41)
-* @param なし
+* @param outputDataName, outputData, countDataNum
 * @return なし
 */
 void System::outputAllData(char* outputDataName, outputData* outputData, int countDataNum)
@@ -181,10 +178,10 @@ void System::outputAllData(char* outputDataName, outputData* outputData, int cou
 
 /*!
 * @brief System::loadInternalCameraParam().カメラキャリブレーションによって得られたカメラパラメータを適用するメソッド(c54)
-* @param なし
+* @param cameraParamFile
 * @return なし
 */
-void System::loadInternalCameraParameter(string cameraParamFile)
+void System::loadInternalCameraParameter(char* cameraParamFile)
 {
 	cout << "Loading Camera Parameter" << endl;
 	//xmlファイルの読み込み
