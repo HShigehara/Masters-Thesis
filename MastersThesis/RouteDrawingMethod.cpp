@@ -1,6 +1,6 @@
 /*
  * @file RouteDrawingMethod.cpp
- * @link https://github.com/HShigehara/3DPathTrackingUsingtheKINECT.git 
+ * @link https://github.com/HShigehara/Masters-Thesis.git
  * @brief 経路をプロットするためのメソッド群
  * @date 2014.10.24
  * @author H.Shigehara

@@ -1,6 +1,6 @@
 /*
 * @file ImageProcessingMethod.hpp 
-* @link https://HShigehara@bitbucket.org/HShigehara/3dpathtrackingusingthekinect.git
+* @link https://github.com/HShigehara/Masters-Thesis.git 
 * @brief 画像処理関連のクラスのヘッダ
 * @date 2014.12.10
 * @author H.Shigehara

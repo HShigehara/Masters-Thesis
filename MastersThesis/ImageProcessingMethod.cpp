@@ -1,6 +1,6 @@
 /*
  * @file ImageProcessingMethod.cpp
- * @link https://github.com/HShigehara/3DPathTrackingUsingtheKINECT.git
+ * @link https://github.com/HShigehara/Masters-Thesis.git
  * @brief 画像処理を行うためのメソッド群
  * @date 2014.10.17
  * @author H.Shigehara

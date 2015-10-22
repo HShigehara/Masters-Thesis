@@ -1,6 +1,6 @@
 /*
 * @file System.hpp
-* @link https://HShigehara@bitbucket.org/HShigehara/3dpathtrackingusingthekinect.git 
+* @link https://github.com/HShigehara/Masters-Thesis.git
 * @brief kinect処理のクラスのヘッダ
 * @date 2014.12.19
 * @author H.Shigehara

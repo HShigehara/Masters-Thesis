@@ -1,6 +1,6 @@
 /*
  * @file KinectMethod.cpp
- * @link https://github.com/HShigehara/3DPathTrackingUsingtheKINECT.git
+ * @link https://github.com/HShigehara/Masters-Thesis.git
  * @brief Kinect‚ğˆµ‚¤‚½‚ß‚Ìƒƒ\ƒbƒhŒQ
  * @date 2014.10.15
  * @author H.Shigehara

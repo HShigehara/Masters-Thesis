@@ -1,6 +1,6 @@
 /*
 * @file LeastSquareMethod.hpp
-* @link https://HShigehara@bitbucket.org/HShigehara/3dpathtrackingusingthekinect.git
+* @link https://github.com/HShigehara/Masters-Thesis.git
 * @brief 最小二乗法を行うクラスのヘッダ
 * @date 2015.07.16
 * @author H.Shigehara
