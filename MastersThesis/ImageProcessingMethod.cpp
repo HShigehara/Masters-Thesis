@@ -133,7 +133,7 @@ Mat ImageProcessing::extractColor(Mat& input_hsvimg)
 			}
 		}
 	}
-
+	//imshow("TEST", hsvceimg);
 	return (hsvceimg);
 }
 
