@@ -295,7 +295,7 @@ void ImageProcessing::trackingObject(Mat& hsv_img)
 * @param ‚È‚µ
 * @return ‚È‚µ
 */
-void ImageProcessing::drawCenterPoint(Mat& image, Point3ius averageCoordinate, char* mainWindowName)
+void ImageProcessing::drawCenterPoint(Mat& image, Point3ius averageCoordinate/*, const string* mainWindowName*/)
 {
 	//Mat mAveragePoint; //•½‹ÏÀ•W‚ğ•`‰æ‚·‚é•Ï”(c45)
 

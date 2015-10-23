@@ -47,7 +47,7 @@ public:
 	void trackingObject(Mat& hsv_img); //!<対象を追跡する(c26)
 
 
-	void drawCenterPoint(Mat& image, Point3ius averageCoordinate, char* mainWindowName); //!<計算した平均座標を画面上に表示する(c45)
+	void drawCenterPoint(Mat& image, Point3ius averageCoordinate/*, const string* mainWindowName*/); //!<計算した平均座標を画面上に表示する(c45)
 
 	Mat mTrim_img;
 };

@@ -151,7 +151,7 @@ void System::openDirectory()
 * @param outputDataName, outputData, countDataNum
 * @return なし
 */
-void System::outputAllData(char* outputDataName, outputData* outputData, int countDataNum)
+void System::outputAllData(const string* outputDataName, outputData* outputData, int countDataNum)
 {
 	//ファイルポインタ
 	FILE *extractedCoordinate; //!<抽出した座標の距離(c7)
@@ -183,7 +183,6 @@ void System::outputAllData(char* outputDataName, outputData* outputData, int cou
 */
 void System::loadInternalCameraParameter(char* cameraParamFile)
 {
-	cout << "Loading Camera Parameter" << endl;
 	//xmlファイルの読み込み
 	FileStorage fs(cameraParamFile, FileStorage::READ); //読み込みモード
 	//内部パラメータの読み込み
@@ -191,4 +190,22 @@ void System::loadInternalCameraParameter(char* cameraParamFile)
 	fs["distortion_coefficients"] >> distortionCoefficients; //歪み係数を読み込む
 
 	return;
+}
+
+/*!
+* @brief System::outputVideo().動作確認用に動画を出力するメソッド
+* @param cameraParamFile
+* @return なし
+*/
+VideoWriter System::outputVideo(const string* outputVideoName)
+{
+	//動画を出力(c40)
+	char outputVideoPath[NOC]; //!<動画出力時のパス(c38)
+	sprintf_s(outputVideoPath, "%s/%s", directoryName, outputVideoName); //(c38)
+	//VideoWriter writer(outputVideoPath, /*CV_FOURCC('D','I','B',' ')*/-1/*CV_FOURCC('X','V','I','D')*//*CV_FOURCC('P','M','I','1')*/, 20, /*Size(WIDTH, HEIGHT)*/Size(640, 480), true); //動画に出力.録画が必要なときはコメントアウト(c35)
+	VideoWriter writer(outputVideoPath, /*CV_FOURCC('D','I','B',' ')*/-1/*CV_FOURCC('X','V','I','D')*//*CV_FOURCC('P','M','I','1')*/, 20, /*Size(WIDTH, HEIGHT)*/Size(640, 480), true); //動画に出力.録画が必要なときはコメントアウト(c35)
+	if (!writer.isOpened()){ //オープンエラー処理(c40)
+		cerr << outputVideoPath << " is Not Opened." << endl;
+	}
+	return (writer);
 }

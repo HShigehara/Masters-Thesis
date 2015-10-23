@@ -28,10 +28,10 @@ private:
 public:
 	RouteDrawing(); //!<コンストラクタ
 	~RouteDrawing(); //!<デストラクタ
-	void plot3D(char* outputDataName); //!<3D座標ファイルをプロットするメソッド
-	void gnuplotScript(/*int checkNum, */char* dataFileName); //
+	void plot3D(const string* outputDataName); //!<3D座標ファイルをプロットするメソッド
+	void gnuplotScript(const string* dataFileName); //
 	void plot3DRealTime(int countDataNum, outputData outputData[OUTPUTDATA_MAX]); //リアルタイムでgnuplotに出力(c43)
-	void gnuplotScriptCoG(/*int checkNum, */char* cogFileName); //!<球の重心座標をプロットするメソッド(c52)
+	void gnuplotScriptCoG(const string* cogFileName); //!<球の重心座標をプロットするメソッド(c52)
 };
 
 /* インクルードガードの終了 */

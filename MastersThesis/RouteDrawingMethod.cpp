@@ -47,7 +47,7 @@ RouteDrawing::~RouteDrawing()
  * @param outputDataName 
  * @return なし
  */
-void RouteDrawing::plot3D(char* outputDataName)
+void RouteDrawing::plot3D(const string* outputDataName)
 {
 	//出力ファイル名の定義
 	char* plotImageName = "plot.jpeg"; //plotしたときの画像ファイル名(c39)
@@ -103,10 +103,10 @@ void RouteDrawing::plot3D(char* outputDataName)
 
 /*!
 * @brief メソッドRouteDrawing::gnuplotScript().後で，3D座標をプロットして確認するためにgnuplotのスクリプトを出力する
-* @param checkNum dataFileName
+* @param dataFileName
 * @return なし
 */
-void RouteDrawing::gnuplotScript(/*int checkNum,*/char* dataFileName)
+void RouteDrawing::gnuplotScript(const string* dataFileName)
 {
 	//if (checkNum == 1){ //データを保存する場合にスクリプトを生成する(c32)
 		FILE *gp; //!<gnuplotスクリプト用のポインタ
@@ -248,10 +248,10 @@ void RouteDrawing::plot3DRealTime(int countDataNum, outputData outputData[OUTPUT
 
 /*!
 * @brief メソッドRouteDrawing::gnuplotScript().後で，球の重心座標をプロットするためにgnuplotのスクリプトを出力する
-* @param checkNum dataFileName
+* @param dataFileName
 * @return なし
 */
-void RouteDrawing::gnuplotScriptCoG(/*int checkNum, */char* cogFileName)
+void RouteDrawing::gnuplotScriptCoG(const string* cogFileName)
 {
 	//if (checkNum == 1){ //データを保存する場合にスクリプトを生成する(c32)
 		FILE *gp; //!<gnuplotスクリプト用のポインタ

@@ -28,8 +28,9 @@ public:
 	void removeDirectory(/*int cNum*/); //!<取得したデータが不要だった場合ディレクトリを削除する
 	int alternatives(); //!<数字の入力をチェックする
 	void openDirectory(); //!<ディレクトリを開く(c38)
-	void outputAllData(char* outputDataName, outputData* outputData, int countDataNum); //!<データをファイルに書き出すメソッド(c41)
+	void outputAllData(const string* outputDataName, outputData* outputData, int countDataNum); //!<データをファイルに書き出すメソッド(c41)
 	void loadInternalCameraParameter(char* cameraParamFile); //!<カメラキャリブレーションによって得られたパラメータを適用する(c54)
+	VideoWriter outputVideo(const string* outputVideoName); //!<動画を出力する
 
 	Mat internalCameraParam; //!<カメラキャリブレーションによって得られた内部パラメータ行列(c54)
 	Mat distortionCoefficients; //!<カメラキャリブレーションによって得られた歪み係数行列(c54)

@@ -53,19 +53,24 @@ void onMouse(int event, int x, int y, int flags, void* param); //!<マウス操作
 int main()
 {
 RETRY: //goto文.計測が上手くいかなかったらリセットする用
+	//インスタンスの生成
+	System sys; //!<システム的なメソッドをまとめているクラス
+	RouteDrawing routedraw; //!<RouteDrawingクラスのインスタンスを生成
+	LeastSquareMethod lsm; //!<最小二乗法を行うクラスのインスタンスを生成(c49)
+
 	//変数の宣言
 	int checkNum; //!<プログラム終了時にデータを保存するか確認するための変数(c38)
-	int countDataNum; //出力されたデータ数をカウントする(c39)
 	outputData outputData[OUTPUTDATA_MAX]; //!<出力するデータを宣言．最大10000個(c41)
 
 	//ファイル名の定義(c39)
-	char* outputDataName = "3d.dat"; //計測データが出力されるファイル名(c39)
-	char* cenerofgravityDataName = "cog.dat"; //重心座標が出力されるファイル名(c52)
+	const string outputDataName = "3d.dat"; //計測データが出力されるファイル名(c39)
+	const string centerofgravityDataName = "cog.dat"; //重心座標が出力されるファイル名(c52)
 
 	//画像関係
 	Mat mHSVforObjectTracking_img; //!<ヒストグラム作成のためのHSV変換後のデータ保存用
 	Mat mHSVforTrim_img; //!<切り取り後の画像格納用(c31)
 	Mat mHSVColorExtraction_img; //!<(ce:color extraction).HSVに変換する用の変数
+	Mat undistort_img; //歪み補正を行った画像(c54)
 
 	//オープニング処理用にとっておく
 	Mat mGray_img; //!<グレースケール用の変数(c19)
@@ -73,41 +78,41 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 	Mat mOpening_img; //!<オープニングを行った画像から距離を抽出する(c24).オープニング処理を行うには必要*/
 	Mat mExtractedBlack_img; //!<オープニング後の二値画像から抽出された黒い座標を格納している変数(c40)
 
-	//インスタンスの生成
-	System sys; //!<システム的なメソッドをまとめているクラス
-	RouteDrawing routedraw; //!<RouteDrawingクラスのインスタンスを生成
-	LeastSquareMethod lsm; //!<最小二乗法を行うクラスのインスタンスを生成(c49)
-
-	//メインの処理
+		//メインの処理
 	try{
 		sys.startMessage(); //プログラム開始時のメッセージを表示
 
 		Kinect kinect; //Kinectクラスのインスタンスを生成
 		ImageProcessing imgproc; //Imageprocessingクラスのインスタンスを生成
-		
+
+		//動画保存用
+		VideoWriter writer; 
 
 		//座標関係の変数の定義
 		Vector4 realPoint; //!<変換後の世界座標系の値を格納
 		Point3ius averageCoordinate; //!<平均座標を格納するクラス内のローカル変数(c38)
 
 		//変数の宣言
+		int countDataNum; //出力されたデータ数をカウントする(c39)
+
+		//フレームレート計算に必要な変数の宣言
+		double f;
 		double sumTime; //合計の時間をカウントする変数
 		double time; //1フレームあたりの時間(c39)
 		double fps; //フレームレート(c39)
 
 		//ウインドウ名とファイル名の定義
-		char* mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
-		char* outputVideoName = "video.avi"; //計測中の動画ファイル名(c39)
+		const string mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
+		const string outputVideoName = "video.avi"; //計測中の動画ファイル名(c39)
 
 		//xmlファイルの読み込み
 		char* cameraParameterName = "cameraParam.xml"; //カメラキャリブレーションによって得られたファイル名(c54)
 		sys.loadInternalCameraParameter(cameraParameterName); //カメラパラメータを読み込む(c54)
-		Mat undistort_img;
+		//const string winname = "歪み補正後"; //歪み補正後に確認する用
 
 		//タイマー用変数
+		int64 start;
 		int64 end; //終了時のタイマー
-
-		//フラグ
 
 		//変数の初期化
 		countDataNum = 0;
@@ -121,19 +126,13 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 		sys.makeDirectory(); //起動時刻をフォルダ名にしてフォルダを作成
 
-		//動画を出力(c40)
-		//char outputVideoPath[NOC]; //!<動画出力時のパス(c38)
-		//sprintf_s(outputVideoPath, "%s/%s", directoryName, outputVideoName); //(c38)
-		//VideoWriter writer(outputVideoPath, /*CV_FOURCC('D','I','B',' ')*/-1/*CV_FOURCC('X','V','I','D')*//*CV_FOURCC('P','M','I','1')*/, 20, /*Size(WIDTH, HEIGHT)*/Size(640, 480), true); //動画に出力.録画が必要なときはコメントアウト(c35)
-		//if (!writer.isOpened()){ //オープンエラー処理(c40)
-		//	cerr << outputVideoPath << " is Not Opened." << endl;
-		//}
-
-
 		kinect.initialize(); //Kinectの初期化
 
+		//動画を保存(c40)
+		//writer = sys.outputVideo(&outputVideoName); //動画を保存したいときはコメントをはずす．while文内のwriter << imageのコメントも
+
 		namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE | CV_WINDOW_FREERATIO); //動画像用のウインドウを表示(c31)
-		namedWindow("歪み補正後", CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO);
+		//namedWindow(winname, CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO); //歪み補正後に確認する用
 
 		while (1){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．
 			//(c25)
@@ -144,16 +143,16 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			::ResetEvent(kinect.streamEvent); //イベントが発生したら次のイベントに備えてリセット
 
 			//タイマーを導入．スタート地点(c18)
-			double f = 1000.0 / getTickFrequency();
-			int64 start = getTickCount(); //スタート
+			/*double */f = 1000.0 / getTickFrequency();
+			start = getTickCount(); //スタート
 
 			//Kinect処理・画像処理
 			kinect.drawRGBImage(image); //RGBカメラの処理
 			
 			//歪み補正後の画像に対して処理を行うようにする
 			undistort(image, undistort_img, sys.internalCameraParam, sys.distortionCoefficients, Mat()); //歪み補正後の画像で上書き(c54)
-			imshow("歪み補正後", undistort_img);
-			//image = undistort_img.clone();
+			//imshow(winname, undistort_img); //歪み補正後の画像を確認する用
+			image = undistort_img.clone(); //歪み補正した画像に対して処理を行うようにコピー．(歪み補正の画像を利用しない場合はコメントアウト)(c54)
 
 			//画像を表示
 			imshow(mainWindowName, image);
@@ -169,11 +168,13 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 				//オープニングを行うなら必要な処理(c30)
 				//グレースケール変換(c19)
 				mGray_img = imgproc.grayscaleImage(mHSVColorExtraction_img);
+
 				//抽出したピクセルからさらに精度を高めるために膨張・収縮を行う(c19)
 				mBin_img = imgproc.binarizationImage(mGray_img); //抽出した画像の二値化
 				mOpening_img = imgproc.OpeningImage(mBin_img); //オープニング処理(c19)
 
 				mExtractedBlack_img = imgproc.getCoordinate(mOpening_img);
+
 				//確認用
 				namedWindow("計測対象の点", CV_WINDOW_KEEPRATIO);
 				//namedWindow("計測対象の点", CV_WINDOW_AUTOSIZE|CV_WINDOW_FREERATIO);
@@ -186,7 +187,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 				averageCoordinate = kinect.getAverageCoordinate(image); //Depthカメラの処理(c5)
 
-				imgproc.drawCenterPoint(image, averageCoordinate, mainWindowName); //平均座標を表示するメソッド(c45)
+				//imgproc.drawCenterPoint(image, averageCoordinate/*, &mainWindowName*/); //平均座標を表示するメソッド(c45)
 
 				if (avgFlag == true){ //平均座標が抽出されていたら
 					realPoint = kinect.getLocalPosition(averageCoordinate); //1フレームあたりの平均座標の3次元座標を取得する(c10)(c28)
@@ -219,7 +220,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			//終了のためのキー入力チェック兼表示のためのウェイトタイム
 			kinect.key = waitKey(1);
 			if (kinect.key == 'q'){ //計測終了
-				sys.outputAllData(outputDataName, outputData, countDataNum);
+				sys.outputAllData(&outputDataName, outputData, countDataNum);
 				//routedraw.plot3D(outputDataName); //(c4)
 				destroyAllWindows();
 				break;
@@ -251,8 +252,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		sys.removeDirectory(/*checkNum*/); //ディレクトリを削除するかどうか
 	}
 	else{ //保存するとき
-		routedraw.gnuplotScript(/*checkNum, */outputDataName); //後で3D座標をプロットする用のgnuplotスクリプトを作るかどうか
-		routedraw.gnuplotScriptCoG(/*checkNum, */cenerofgravityDataName); //後で重心座標をプロットする用のgnuplotスクリプトを作るかどうか(c52)
+		routedraw.gnuplotScript(/*checkNum, */&outputDataName); //後で3D座標をプロットする用のgnuplotスクリプトを作るかどうか
+		routedraw.gnuplotScriptCoG(/*checkNum, */&centerofgravityDataName); //後で重心座標をプロットする用のgnuplotスクリプトを作るかどうか(c52)
 	}
 
 	sys.endMessage(checkNum);
