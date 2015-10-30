@@ -12,6 +12,7 @@
 #include<iostream> //!<標準入出力ストリーム
 #include<sstream> //!<ストリングストリーム
 #include<fstream> //!<ファイル入出力ストリーム
+#include<string> //!<文字列
 using namespace std; //!<名前空間
 
 #include<stdio.h> //!<Cの標準入出力ストリーム

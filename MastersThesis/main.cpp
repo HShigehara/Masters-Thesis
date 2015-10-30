@@ -13,6 +13,7 @@
 #include "RouteDrawingMethod.hpp"
 #include "System.hpp"
 #include "LeastSquareMethod.hpp" //(c49)
+#include "PointCloudMethod.hpp" //ポイントクラウド処理のヘッダを追加(c57)
 
 /* グローバル変数 */
 //画像データ
@@ -66,7 +67,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 	const string outputDataName = "3d.dat"; //計測データが出力されるファイル名(c39)
 	const string centerofgravityDataName = "cog.dat"; //重心座標が出力されるファイル名(c52)
 
-	//画像関係
+	//画像関係の変数
 	Mat mHSVforObjectTracking_img; //!<ヒストグラム作成のためのHSV変換後のデータ保存用
 	Mat mHSVforTrim_img; //!<切り取り後の画像格納用(c31)
 	Mat mHSVColorExtraction_img; //!<(ce:color extraction).HSVに変換する用の変数
@@ -78,12 +79,16 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 	Mat mOpening_img; //!<オープニングを行った画像から距離を抽出する(c24).オープニング処理を行うには必要*/
 	Mat mExtractedBlack_img; //!<オープニング後の二値画像から抽出された黒い座標を格納している変数(c40)
 
+	//ポイントクラウド関係の変数(c57)
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud; //ポイントクラウド保存用(c57)
+
 		//メインの処理
 	try{
 		sys.startMessage(); //プログラム開始時のメッセージを表示
 
 		Kinect kinect; //Kinectクラスのインスタンスを生成
 		ImageProcessing imgproc; //Imageprocessingクラスのインスタンスを生成
+		PointCloudMethod pcm; //PointCloudMethodクラスのインスタンスを生成(c57)
 
 		//動画保存用
 		//VideoWriter writer; //動画保存用 
@@ -127,6 +132,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		sys.makeDirectory(); //起動時刻をフォルダ名にしてフォルダを作成
 
 		kinect.initialize(); //Kinectの初期化
+		pcm.initializePointCloudViewer("Point Cloud"); //クラウドビューワーの初期化
 
 		//動画を保存(c40)
 		//writer = sys.outputVideo(&outputVideoName); //動画を保存したいときはコメントをはずす．while文内のwriter << imageのコメントも
@@ -148,7 +154,11 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 			//Kinect処理・画像処理
 			kinect.drawRGBImage(image); //RGBカメラの処理
-			
+
+			//ポイントクラウドの取得(c57)
+			cloud = kinect.getPointCloud(image); //ポイントクラウドの取得(c57)
+			pcm.viewer->showCloud(cloud);
+
 			//歪み補正後の画像に対して処理を行うようにする
 			undistort(image, undistort_img, sys.internalCameraParam, sys.distortionCoefficients, Mat()); //歪み補正後の画像で上書き(c54)
 			//imshow(winname, undistort_img); //歪み補正後の画像を確認する用

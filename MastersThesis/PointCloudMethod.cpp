@@ -18,6 +18,7 @@
 PointCloudMethod::PointCloudMethod()
 {
 	//コンストラクタ
+	//cloudViewerName = "Point Cloud"; //クラウドビューワーの名前を指定
 }
 
 /*!
@@ -28,4 +29,10 @@ PointCloudMethod::PointCloudMethod()
 PointCloudMethod::~PointCloudMethod()
 {
 	//デストラクタ
+}
+
+void PointCloudMethod::initializePointCloudViewer(string cloudViewerName)
+{
+	viewer = new pcl::visualization::CloudViewer(cloudViewerName);
+	return;
 }

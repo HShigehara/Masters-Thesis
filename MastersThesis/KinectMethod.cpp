@@ -89,20 +89,24 @@ void Kinect::initialize()
  */
 Mat Kinect::drawRGBImage(Mat& image)
 {
-	//RGBカメラのフレームデータを取得する
-	NUI_IMAGE_FRAME imageFrame = { 0 };
-	ERROR_CHECK(kinect->NuiImageStreamGetNextFrame(imageStreamHandle, 0, &imageFrame));
+	try{
+		//RGBカメラのフレームデータを取得する
+		NUI_IMAGE_FRAME imageFrame = { 0 };
+		ERROR_CHECK(kinect->NuiImageStreamGetNextFrame(imageStreamHandle, 0, &imageFrame));
 
-	//画像データの取得
-	NUI_LOCKED_RECT colorData;
-	imageFrame.pFrameTexture->LockRect(0, &colorData, 0, 0);
+		//画像データの取得
+		NUI_LOCKED_RECT colorData;
+		imageFrame.pFrameTexture->LockRect(0, &colorData, 0, 0);
 
-	//画像データのコピー
-	image = Mat(height, width, CV_8UC4, colorData.pBits);
+		//画像データのコピー
+		image = Mat(height, width, CV_8UC4, colorData.pBits);
 
-	//フレームデータの解放
-	ERROR_CHECK(kinect->NuiImageStreamReleaseFrame(imageStreamHandle, &imageFrame));
-
+		//フレームデータの解放
+		ERROR_CHECK(kinect->NuiImageStreamReleaseFrame(imageStreamHandle, &imageFrame));
+	}
+	catch (exception& ex){ //例外処理(c57)
+		cout << ex.what() << endl;
+	}
 	return (image); //RGBカメラから画像を取得し返す(c30)
 }
 
@@ -197,4 +201,57 @@ Point3ius Kinect::getAverageCoordinate(Mat& image) //(c31)
 	rp.z = (float)(worldCoordinate.z *1000.0f);
 
 	return rp;
+}
+
+/*
+ * @brief メソッドKinect::setDepthImage(Mat& image).デプス画像を取得するメソッド(c57)
+ * @param cv::Mat& image
+ * @return なし
+ */
+pcl::PointCloud<pcl::PointXYZ>::Ptr Kinect::getPointCloud(Mat& image)
+{
+	try{
+		pcl::PointCloud<pcl::PointXYZ>::Ptr points(new pcl::PointCloud<pcl::PointXYZ>()); //ポイントクラウド保存用(c57)
+		points->width = width;
+		points->height = height;
+
+		image = Mat(height, width, CV_8UC1, Scalar(0)); //距離画像の準備
+
+		//距離カメラのフレームデータを取得
+		NUI_IMAGE_FRAME depthFrame = { 0 };
+		ERROR_CHECK(kinect->NuiImageStreamGetNextFrame(depthStreamHandle, 0, &depthFrame));
+
+		//距離データを取得する
+		NUI_LOCKED_RECT depthData = { 0 };
+		depthFrame.pFrameTexture->LockRect(0, &depthData, 0, 0);
+
+		USHORT* depth = (USHORT*)depthData.pBits;
+		for (int i = 0; i < (depthData.size / sizeof(USHORT)); ++i){
+			USHORT distance = ::NuiDepthPixelToDepth(depth[i]);
+			LONG depthX = i % width;
+			LONG depthY = i / width;
+			LONG colorX = depthX;
+			LONG colorY = depthY;
+
+			// 距離カメラの座標を、RGBカメラの座標に変換する
+			kinect->NuiImageGetColorPixelCoordinatesFromDepthPixelAtResolution(CAMERA_RESOLUTION, CAMERA_RESOLUTION, 0, depthX, depthY, 0, &colorX, &colorY);
+
+			// 距離画像作成
+			image.at<UCHAR>(colorY, colorX) = distance / 8192.0 * 255.0;
+
+			// ポイントクラウド
+			Vector4 real = NuiTransformDepthImageToSkeleton(depthX, depthY, distance, CAMERA_RESOLUTION);
+			pcl::PointXYZ point;
+			point.x = real.x;
+			point.y = -real.y;
+			point.z = real.z;
+			
+			points->push_back(point);
+		}
+		cloud = points;
+	}
+	catch (exception& ex){
+		cout << ex.what() << endl;
+	}
+	return cloud;
 }
