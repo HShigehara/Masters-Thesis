@@ -86,7 +86,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		ImageProcessing imgproc; //Imageprocessingクラスのインスタンスを生成
 
 		//動画保存用
-		VideoWriter writer; 
+		//VideoWriter writer; //動画保存用 
 
 		//座標関係の変数の定義
 		Vector4 realPoint; //!<変換後の世界座標系の値を格納

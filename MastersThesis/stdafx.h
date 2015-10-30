@@ -5,6 +5,8 @@
 
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS //fopen等昔の関数の警告を非表示にする
+
 /* よく利用するヘッダーをプリコンパイルする */
 /* ヘッダファイルのインクルード */
 #include<iostream> //!<標準入出力ストリーム
@@ -28,10 +30,24 @@ using namespace std; //!<名前空間
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\imgproc\imgproc.hpp>
 #include<opencv2\video\tracking.hpp> //!<動画のトラッキングを行うためのライブラリ(c25)
+#include<opencv2\flann\flann.hpp>
 using namespace cv; //!<名前空間
 
 /* ラベリング処理を行うヘッダを追加(c21) */
 //#include "Labeling.hpp"
+
+/* PCL関連のインクルード */
+#include<pcl\point_types.h>
+#include<pcl\point_cloud.h>
+#include <pcl\io\io.h>
+#include <pcl\io\pcd_io.h> //.pcd出力用
+#include <pcl\visualization\cloud_viewer.h>
+#include <pcl\visualization\pcl_visualizer.h>
+#include <pcl\filters\statistical_outlier_removal.h> //外れ値フィルター用
+#include <pcl\kdtree\kdtree_flann.h> //スムージング用
+#include <pcl\surface\mls.h> //スムージング用
+#include <pcl\filters\voxel_grid.h> //ダウンサンプリング用
+#include <pcl\PCLPointField.h>
 
 /* 定義 */
 //マクロ

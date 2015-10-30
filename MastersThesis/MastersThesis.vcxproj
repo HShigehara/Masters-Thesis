@@ -71,8 +71,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files\Microsoft SDKs\Kinect\v1.8\inc;C:\OpenCV2.4.7\build\include;C:\Program Files (x86)\PCL 1.7.2\3rdParty\Eigen\eigen3;C:\Program Files (x86)\PCL 1.7.2\3rdParty\VTK\include\vtk-6.2;C:\Program Files (x86)\PCL 1.7.2\3rdParty\Boost\include\boost-1_57;C:\Program Files (x86)\PCL 1.7.2\include\pcl-1.7</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Microsoft SDKs\Kinect\v1.8\inc;C:\OpenCV2.4.7\build\include\opencv2;C:\OpenCV2.4.7\build\include;C:\Program Files (x86)\PCL 1.7.2\3rdParty\Eigen\eigen3;C:\Program Files (x86)\PCL 1.7.2\3rdParty\VTK\include\vtk-6.2;C:\Program Files (x86)\PCL 1.7.2\3rdParty\Boost\include\boost-1_57;C:\Program Files (x86)\PCL 1.7.2\include\pcl-1.7</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
+      <AdditionalOptions>-Zm500 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,6 +93,7 @@
     <ClInclude Include="ImageProcessingMethod.hpp" />
     <ClInclude Include="KinectMethod.hpp" />
     <ClInclude Include="LeastSquareMethod.hpp" />
+    <ClInclude Include="PointCloudMethod.hpp" />
     <ClInclude Include="RouteDrawingMethod.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System.hpp" />
@@ -102,6 +104,7 @@
     <ClCompile Include="LeastSquareMethod.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PointCloudMethod.cpp" />
     <ClCompile Include="RouteDrawingMethod.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
