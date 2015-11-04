@@ -71,7 +71,7 @@ void Kinect::initialize()
 	ERROR_CHECK(kinect->NuiInitialize(NUI_INITIALIZE_FLAG_USES_COLOR | NUI_INITIALIZE_FLAG_USES_DEPTH)); //Kinectの設定を初期化
 	ERROR_CHECK(kinect->NuiImageStreamOpen(NUI_IMAGE_TYPE_COLOR, CAMERA_RESOLUTION, 0, 2, 0, &imageStreamHandle)); //RGBカメラを初期化
 	ERROR_CHECK(kinect->NuiImageStreamOpen(NUI_IMAGE_TYPE_DEPTH, CAMERA_RESOLUTION, 0, 2, 0, &depthStreamHandle)); //Depthカメラを初期化
-	ERROR_CHECK(kinect->NuiImageStreamSetImageFrameFlags(depthStreamHandle, NUI_IMAGE_STREAM_FLAG_ENABLE_NEAR_MODE)); //Nearモード
+	//ERROR_CHECK(kinect->NuiImageStreamSetImageFrameFlags(depthStreamHandle, NUI_IMAGE_STREAM_FLAG_ENABLE_NEAR_MODE)); //Nearモード
 
 	//フレーム更新のイベントハンドルを作成
 	streamEvent = ::CreateEvent(0, TRUE, FALSE, 0);
@@ -204,9 +204,9 @@ Point3ius Kinect::getAverageCoordinate(Mat& image) //(c31)
 }
 
 /*
- * @brief メソッドKinect::setDepthImage(Mat& image).デプス画像を取得するメソッド(c57)
- * @param cv::Mat& image
- * @return なし
+ * @brief メソッドKinect::setDepthImage(Mat& Mat_image).デプス画像を取得するメソッド(c57)
+ * @param cv::Mat& Mat_image
+ * @return pcl::PointCloud<pcl::PointXYZ>::Ptr points
  */
 pcl::PointCloud<pcl::PointXYZ>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 {
@@ -249,7 +249,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 			points->push_back(point);
 		}
 		cloud = points;
-		cout << cloud->size() << endl;
 
 		//フレームデータを開放する(c58)
 		ERROR_CHECK(kinect->NuiImageStreamReleaseFrame(depthStreamHandle, &depthFrame));

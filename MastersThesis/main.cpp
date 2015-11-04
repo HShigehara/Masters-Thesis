@@ -133,7 +133,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		sys.makeDirectory(); //起動時刻をフォルダ名にしてフォルダを作成
 
 		kinect.initialize(); //Kinectの初期化
-		//pcm.initializePointCloudViewer("Point Cloud"); //クラウドビューワーの初期化
+		pcm.initializePointCloudViewer("Point Cloud"); //クラウドビューワーの初期化
 
 		//動画を保存(c40)
 		//writer = sys.outputVideo(&outputVideoName); //動画を保存したいときはコメントをはずす．while文内のwriter << imageのコメントも
@@ -167,6 +167,10 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 			//ポイントクラウドの取得(c57)
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
+			
+			//ダウンサンプリング処理(c59)
+			*cloud = pcm.downSamplingUsingVoxelGridFilter(cloud);
+			
 			pcm.viewer->showCloud(cloud);
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 

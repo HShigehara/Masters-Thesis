@@ -19,7 +19,7 @@
 */
 class PointCloudMethod{
 private:
-	string cloudViewerName; //クラウドビューワーのウインドウ名
+	//string cloudViewerName; //クラウドビューワーのウインドウ名
 
 
 public:
@@ -27,6 +27,7 @@ public:
 	~PointCloudMethod(); //デストラクタ
 
 	void initializePointCloudViewer(string cloudViewerName);
+	pcl::PointCloud<pcl::PointXYZ> downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
 
 	//クラウドビューワー用
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
