@@ -27,7 +27,9 @@ public:
 	~PointCloudMethod(); //デストラクタ
 
 	void initializePointCloudViewer(string cloudViewerName);
-	pcl::PointCloud<pcl::PointXYZ> downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZ>::Ptr downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZ>::Ptr removeOutlier(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZ>::Ptr smoothingUsingMovingLeastSquare(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
 
 	//クラウドビューワー用
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;

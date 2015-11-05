@@ -62,7 +62,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 	//変数の宣言
 	int checkNum; //!<プログラム終了時にデータを保存するか確認するための変数(c38)
-	outputData outputData[OUTPUTDATA_MAX]; //!<出力するデータを宣言．最大10000個(c41)
+	//outputData outputData[OUTPUTDATA_MAX]; //!<出力するデータを宣言．最大10000個(c41)
 
 	//ファイル名の定義(c39)
 	const string outputDataName = "3d.dat"; //計測データが出力されるファイル名(c39)
@@ -96,16 +96,16 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 		//座標関係の変数の定義
 		Vector4 realPoint; //!<変換後の世界座標系の値を格納
-		Point3ius averageCoordinate; //!<平均座標を格納するクラス内のローカル変数(c38)
+		//Point3ius averageCoordinate; //!<平均座標を格納するクラス内のローカル変数(c38)
 
 		//変数の宣言
 		int countDataNum; //出力されたデータ数をカウントする(c39)
 
 		//フレームレート計算に必要な変数の宣言
-		double f;
+		//double f;
 		double sumTime; //合計の時間をカウントする変数
 		double time; //1フレームあたりの時間(c39)
-		double fps; //フレームレート(c39)
+		//double fps; //フレームレート(c39)
 
 		//ウインドウ名とファイル名の定義
 		//const string mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
@@ -117,8 +117,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		////const string winname = "歪み補正後"; //歪み補正後に確認する用
 
 		//タイマー用変数
-		int64 start;
-		int64 end; //終了時のタイマー
+		//int64 start;
+		//int64 end; //終了時のタイマー
 
 		//変数の初期化
 		countDataNum = 0;
@@ -130,7 +130,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		avgFlag = /*0*/false; //再計測のために平均座標を計算したかチェックするフラグ変数を初期化
 		mouseFlag = /*0*/false; //再計測のためにマウスをクリックしたかをチェックするフラグ変数を初期化
 
-		sys.makeDirectory(); //起動時刻をフォルダ名にしてフォルダを作成
+		//sys.makeDirectory(); //起動時刻をフォルダ名にしてフォルダを作成
 
 		kinect.initialize(); //Kinectの初期化
 		pcm.initializePointCloudViewer("Point Cloud"); //クラウドビューワーの初期化
@@ -168,9 +168,15 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			//ポイントクラウドの取得(c57)
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
 			
+			//外れ値除去(c59)
+			//cloud = pcm.removeOutlier(cloud);
+
 			//ダウンサンプリング処理(c59)
-			*cloud = pcm.downSamplingUsingVoxelGridFilter(cloud);
+			cloud = pcm.downSamplingUsingVoxelGridFilter(cloud);
 			
+			//スムージング処理(c60)
+			cloud = pcm.smoothingUsingMovingLeastSquare(cloud);
+
 			pcm.viewer->showCloud(cloud);
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 
