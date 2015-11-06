@@ -32,6 +32,9 @@
 * LeastSquareMethod.hpp / LeastSquareMethod.cpp
 ** 最小二乗法に関する処理が記述されたファイル
 
+* PointCloudMethod.hpp / PointCloudMethod.cpp
+** PCL関連の処理をまとめたメソッド
+
 * ChangeLog.txt
 ** 変更点を記述したファイル
 
