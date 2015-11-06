@@ -40,7 +40,7 @@ public:
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr smoothingUsingMovingLeastSquare(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool compute_normals, bool polynomial_fit, double radius);
 
 	//平面検出
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr planeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool optimize, double threshold, bool negative);
 
 	//クラウドビューワー用
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;

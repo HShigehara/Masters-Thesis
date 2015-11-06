@@ -102,13 +102,13 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		int countDataNum; //出力されたデータ数をカウントする(c39)
 
 		//フレームレート計算に必要な変数の宣言
-		//double f;
+		double f;
 		double sumTime; //合計の時間をカウントする変数
 		double time; //1フレームあたりの時間(c39)
-		//double fps; //フレームレート(c39)
+		double fps; //フレームレート(c39)
 
 		//ウインドウ名とファイル名の定義
-		//const string mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
+		const string mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
 		//const string outputVideoName = "video.avi"; //計測中の動画ファイル名(c39)
 
 		//xmlファイルの読み込み
@@ -117,8 +117,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		////const string winname = "歪み補正後"; //歪み補正後に確認する用
 
 		//タイマー用変数
-		//int64 start;
-		//int64 end; //終了時のタイマー
+		int64 start;
+		int64 end; //終了時のタイマー
 
 		//変数の初期化
 		countDataNum = 0;
@@ -142,16 +142,16 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		//namedWindow(winname, CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO); //歪み補正後に確認する用
 
 		while (1){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．
+			//タイマーを導入．スタート地点(c18)
+			f = 1000.0 / getTickFrequency();
+			start = getTickCount(); //スタート
+
 			//(c25)
 			//setMouseCallback(mainWindowName, onMouse, 0); //マウスコールバック関数をセット(c31)
 
 			//データの更新を待つ
 			DWORD ret = ::WaitForSingleObject(kinect.streamEvent, INFINITE); //フレーム更新をイベントとして待つ
 			::ResetEvent(kinect.streamEvent); //イベントが発生したら次のイベントに備えてリセット
-
-			//タイマーを導入．スタート地点(c18)
-			///*double */f = 1000.0 / getTickFrequency();
-			//start = getTickCount(); //スタート
 
 			//Kinect処理・画像処理
 			kinect.drawRGBImage(image); //RGBカメラの処理
@@ -167,7 +167,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 			//ポイントクラウドの取得(c57)
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
-			
+			cout << "==============================================================" << endl;
+			cout << "Original PointCloud Size => " << cloud->size() << endl;
 
 			//PCLの処理
 			//外れ値除去(c59)
@@ -176,14 +177,14 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
 
 			//ダウンサンプリング処理(c59)
-			//cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
+			cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
 			
 			//スムージング処理(c60)
-			//cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.003); //0.002 < radius < ◯．小さいほど除去される
+			cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.003); //0.002 < radius < ◯．小さいほど除去される
 
 			//平面検出(c61)
-			cloud = pcm.planeSegmentation(cloud);
-
+			cloud = pcm.extractPlane(cloud, true, 0.05, false);
+			cout << "==============================================================" << endl;
 			pcm.viewer->showCloud(cloud);
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 
@@ -247,6 +248,13 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			//else{ //マウスがクリックされていないときのタイマー終了(c41)
 				//end = getTickCount(); //タイマー終了
 			//}
+
+			//PCLのフレームレートを計算する用(c61)
+			end = getTickCount();
+			time = (end - start) * f;
+			fps = 1000.0 / time;
+			cout << fps << " fps\n" << endl;
+
 
 			//終了のためのキー入力チェック兼表示のためのウェイトタイム
 			kinect.key = waitKey(1);

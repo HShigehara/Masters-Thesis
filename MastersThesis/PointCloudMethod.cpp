@@ -44,7 +44,7 @@ void PointCloudMethod::initializePointCloudViewer(string cloudViewerName)
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud)
 {
-	//cout << "before PassThroughFilter => " << inputPointCloud->size() << endl;
+	cout << "before PassThroughFilter => " << inputPointCloud->size() << endl;
 
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZRGB>()); //フィルター後用のポイントクラウド
 	pcl::PassThrough<pcl::PointXYZRGB> pt;
@@ -54,8 +54,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::passThroughFilter(pcl::
 	pt.filter(*filtered);
 
 	
-	//cout << "after PassThroughFilter => " << filtered->size() << endl;
-
+	cout << "after PassThroughFilter => " << filtered->size() << endl;
 	return filtered;
 }
 
@@ -79,7 +78,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::removeOutlier(pcl::Poin
 	fl.filter(*filtered);
 
 	cout << "after Remove Outlier => " << filtered->size() << endl;
-
 	return filtered;
 }
 
@@ -113,6 +111,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::radiusOutlierRemoval(pc
 */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, float leafSizeX, float leafSizeY, float leafSizeZ)
 {
+	cout << "before Voxel Grid Filter => " << inputPointCloud->size() << endl;
+
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZRGB>()); //フィルタリング後用のポイントクラウドを宣言
 	pcl::VoxelGrid<pcl::PointXYZRGB> vg;
 
@@ -126,7 +126,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::downSamplingUsingVoxelG
 	//ポイントクラウドをしっかり保持できているかサイズを確認
 	//cout << "inputSIZE => " << inputPointCloud->size() << endl; //入力したポイントクラウドのサイズ
 	cout << "after Voxel Grid Filter => " << filtered->size() << endl; //出力されるポイントクラウドのサイズ
-
 	return filtered;
 }
 
@@ -137,11 +136,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::downSamplingUsingVoxelG
 */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::smoothingUsingMovingLeastSquare(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool compute_normals, bool polynomial_fit, double radius)
 {
+	cout << "before MLS => " << inputPointCloud->size() << endl;
+
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZRGB>()); //フィルタリング処理後用のポイントクラウド
-
 	pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGB>()); //KdTreeの作成
-
-	//pcl::PointCloud<pcl::PointXYZ> mls_points; //出力する点群の保存場所
 	pcl::MovingLeastSquares<pcl::PointXYZRGB, pcl::PointXYZRGB> mls; //スムージング処理
 
 	mls.setComputeNormals(compute_normals); //法線の計算
@@ -154,17 +152,15 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::smoothingUsingMovingLea
 	//mls.process(mls_points); //出力
 	mls.process(*filtered); // 出力
 
-	//cout << "after MLS => " << mls_points.size() << endl;
 	cout << "after MLS => " << filtered->size() << endl;
-	//cout << "after MLS(Point Cloud Data) => " << filtered << endl;
-
-	//return mls_points;
 	return filtered;
 }
 
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::planeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool optimize, double threshold, bool negative)
 {
+	cout << "before Extract Plane => " << inputPointCloud->size() << endl;
+
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZRGB>());
 	pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
 	pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
@@ -173,44 +169,27 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::planeSegmentation(pcl::
 	pcl::SACSegmentation<pcl::PointXYZRGB> seg;
 	
 	//オプション
-	seg.setOptimizeCoefficients(true);
+	seg.setOptimizeCoefficients(optimize);
 
 	//Mandatory
 	seg.setModelType(pcl::SACMODEL_PLANE);
 	seg.setMethodType(pcl::SAC_RANSAC);
-	seg.setDistanceThreshold(0.01);
-
+	seg.setDistanceThreshold(threshold);
 	seg.setInputCloud(inputPointCloud->makeShared());
 	seg.segment(*inliers, *coefficients);
 
-
-
-	//if (inliers->indices.size() == 0){
-	//	PCL_ERROR("Cloud not estimate a planar model for the given dataset.");
-	//	exit(1);
-	//}
-	//cerr << "Model coefficients: " << coefficients->values[0] << " " << coefficients->values[1] << " " << coefficients->values[2] << " " << coefficients->values[3] << endl;
-	//cerr << "Model inliers: " << inliers->indices.size() << endl;
 	for (size_t i = 0; i < inliers->indices.size(); ++i){
-		//cerr << inliers->indices[i] << " "
-		//	<< inputPointCloud->points[inliers->indices[i]].x << " "
-		//	<< inputPointCloud->points[inliers->indices[i]].y << " "
-		//	<< inputPointCloud->points[inliers->indices[i]].z << " "
-		//	<< endl;
-
 		inputPointCloud->points[inliers->indices[i]].r = 255;
-		inputPointCloud->points[inliers->indices[i]].g = 0;
-		inputPointCloud->points[inliers->indices[i]].b = 0;
-
+		inputPointCloud->points[inliers->indices[i]].g = 255;
+		inputPointCloud->points[inliers->indices[i]].b = 255;
 	}
 
 	pcl::ExtractIndices<pcl::PointXYZRGB> extract;
 	extract.setInputCloud(inputPointCloud);
 	extract.setIndices(inliers);
-	extract.setNegative(false);
+	extract.setNegative(negative);
 	extract.filter(*filtered);
 
-	//filtered = inputPointCloud->makeShared();
-	//cout << "TEST => " << filtered->size() << endl;
+	cout << "after Extract Plane => " << filtered->size() << endl;
 	return filtered;
 }
