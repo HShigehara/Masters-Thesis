@@ -81,7 +81,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 	Mat mExtractedBlack_img; //!<オープニング後の二値画像から抽出された黒い座標を格納している変数(c40)
 
 	//ポイントクラウド関係の変数(c57)
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud; //ポイントクラウド保存用(c57)
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; //ポイントクラウド保存用(c57)
 
 		//メインの処理
 	try{
@@ -169,13 +169,18 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
 			
 			//外れ値除去(c59)
-			//cloud = pcm.removeOutlier(cloud);
+			//cloud = pcm.passThroughFilter(cloud); //Kinectから取得した初期の外れ値を除去(c60)
+			//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)
+			//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
 
 			//ダウンサンプリング処理(c59)
-			cloud = pcm.downSamplingUsingVoxelGridFilter(cloud);
+			//cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
 			
 			//スムージング処理(c60)
-			cloud = pcm.smoothingUsingMovingLeastSquare(cloud);
+			//cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.003); //0.002 < radius < ◯．小さいほど除去される
+
+			//平面検出(c61)
+			cloud = pcm.planeSegmentation(cloud);
 
 			pcm.viewer->showCloud(cloud);
 			//imgproc.showImage("DEPTH(TEST)", depth_image);

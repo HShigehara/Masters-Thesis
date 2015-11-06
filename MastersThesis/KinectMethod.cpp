@@ -208,10 +208,10 @@ Point3ius Kinect::getAverageCoordinate(Mat& image) //(c31)
  * @param cv::Mat& Mat_image
  * @return pcl::PointCloud<pcl::PointXYZ>::Ptr points
  */
-pcl::PointCloud<pcl::PointXYZ>::Ptr Kinect::getPointCloud(Mat& Mat_image)
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 {
 	try{
-		pcl::PointCloud<pcl::PointXYZ>::Ptr points(new pcl::PointCloud<pcl::PointXYZ>()); //ポイントクラウド保存用(c57)
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr points(new pcl::PointCloud<pcl::PointXYZRGB>()); //ポイントクラウド保存用(c57)
 		points->width = width;
 		points->height = height;
 
@@ -241,11 +241,15 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 
 			// ポイントクラウド
 			Vector4 real = NuiTransformDepthImageToSkeleton(depthX, depthY, distance, CAMERA_RESOLUTION);
-			pcl::PointXYZ point;
+			pcl::PointXYZRGB point;
 			point.x = real.x;
 			point.y = -real.y;
 			point.z = real.z;
 			
+			point.r = 0;
+			point.g = 0;
+			point.b = 0;
+
 			points->push_back(point);
 		}
 		cloud = points;

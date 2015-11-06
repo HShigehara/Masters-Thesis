@@ -39,7 +39,7 @@ private:
 
 	int countKinect; //!<接続されているKinectの数をカウントする変数
 
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud; //!<点群データ保存用(c57)
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; //!<点群データ保存用(c57)
 
 public:
 	Kinect(); //!<コンストラクタ
@@ -54,7 +54,7 @@ public:
 	void createInstance(); //!<インスタンスの生成
 
 	Mat drawRGBImage(Mat& image); //!<RGBカメラの処理
-	pcl::PointCloud<pcl::PointXYZ>::Ptr getPointCloud(Mat& Mat_image); //!<Depthカメラの処理(c57)
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr getPointCloud(Mat& Mat_image); //!<Depthカメラの処理(c57)
 	Point3ius getAverageCoordinate(Mat& image); //!<Depthカメラの処理
 	
 	int getDistance(Mat& image); //!<距離を取得(c49)

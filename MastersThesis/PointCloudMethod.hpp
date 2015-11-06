@@ -27,12 +27,23 @@ public:
 	~PointCloudMethod(); //デストラクタ
 
 	void initializePointCloudViewer(string cloudViewerName);
-	pcl::PointCloud<pcl::PointXYZ>::Ptr downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
-	pcl::PointCloud<pcl::PointXYZ>::Ptr removeOutlier(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
-	pcl::PointCloud<pcl::PointXYZ>::Ptr smoothingUsingMovingLeastSquare(pcl::PointCloud<pcl::PointXYZ>::Ptr &inputPointCloud);
+
+	//外れ値除去
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr removeOutlier(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr radiusOutlierRemoval(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
+	
+	//ダウンサンプリング
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr downSamplingUsingVoxelGridFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, float leafSizeX, float leafSizeY, float leafSizeZ);
+
+	//スムージング
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr smoothingUsingMovingLeastSquare(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool compute_normals, bool polynomial_fit, double radius);
+
+	//平面検出
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr planeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
 
 	//クラウドビューワー用
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 	pcl::visualization::CloudViewer *viewer;
 
 

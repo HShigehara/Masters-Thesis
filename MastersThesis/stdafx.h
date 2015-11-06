@@ -9,45 +9,51 @@
 
 /* よく利用するヘッダーをプリコンパイルする */
 /* ヘッダファイルのインクルード */
-#include<iostream> //!<標準入出力ストリーム
-#include<sstream> //!<ストリングストリーム
-#include<fstream> //!<ファイル入出力ストリーム
-#include<string> //!<文字列
+#include <iostream> //!<標準入出力ストリーム
+#include <sstream> //!<ストリングストリーム
+#include <fstream> //!<ファイル入出力ストリーム
+#include <string> //!<文字列
 using namespace std; //!<名前空間
 
-#include<stdio.h> //!<Cの標準入出力ストリーム
-#include<stdlib.h> //!<標準ライブラリ
-#include<direct.h> //!<ディレクトリを作成するため用いる
-#include<math.h> //!<数学関数用のライブラリ(c12)
-#include<ctype.h> //!<文字の種類の判定や文字の変換を行う(c25)
+#include <stdio.h> //!<Cの標準入出力ストリーム
+#include <stdlib.h> //!<標準ライブラリ
+#include <direct.h> //!<ディレクトリを作成するため用いる
+#include <math.h> //!<数学関数用のライブラリ(c12)
+#include <ctype.h> //!<文字の種類の判定や文字の変換を行う(c25)
 
 /* NuiApi.hの前にWindows.hをインクルードする */
-#include<Windows.h>
-#include<NuiApi.h>
+#include <Windows.h>
+#include <NuiApi.h>
 
 /* OpenCV関連のインクルード */
-#include<opencv2\opencv.hpp>
-#include<opencv2\core\core.hpp>
-#include<opencv2\highgui\highgui.hpp>
-#include<opencv2\imgproc\imgproc.hpp>
-#include<opencv2\video\tracking.hpp> //!<動画のトラッキングを行うためのライブラリ(c25)
-#include<opencv2\flann\flann.hpp>
+#include <opencv2\opencv.hpp>
+#include <opencv2\core\core.hpp>
+#include <opencv2\highgui\highgui.hpp>
+#include <opencv2\imgproc\imgproc.hpp>
+#include <opencv2\video\tracking.hpp> //!<動画のトラッキングを行うためのライブラリ(c25)
+#include <opencv2\flann\flann.hpp>
 using namespace cv; //!<名前空間
 
 /* ラベリング処理を行うヘッダを追加(c21) */
 //#include "Labeling.hpp"
 
 /* PCL関連のインクルード */
-#include<pcl\point_types.h>
-#include<pcl\point_cloud.h>
+#include <pcl\point_types.h>
+#include <pcl\point_cloud.h>
 #include <pcl\io\io.h>
 #include <pcl\io\pcd_io.h> //.pcd出力用
 #include <pcl\visualization\cloud_viewer.h>
 #include <pcl\visualization\pcl_visualizer.h>
+#include <pcl\filters\passthrough.h> //Kinectから取得した初期の外れ値を削除
 #include <pcl\filters\statistical_outlier_removal.h> //外れ値フィルター用
+#include <pcl\filters\radius_outlier_removal.h> //外れ値フィルター用(c60)
 #include <pcl\kdtree\kdtree_flann.h> //スムージング用
 #include <pcl\surface\mls.h> //スムージング用
 #include <pcl\filters\voxel_grid.h> //ダウンサンプリング用
+#include <pcl\ModelCoefficients.h>
+#include <pcl\sample_consensus\method_types.h>
+#include <pcl\sample_consensus\model_types.h>
+#include <pcl\segmentation\sac_segmentation.h>
 #include <pcl\PCLPointField.h>
 
 /* 定義 */
