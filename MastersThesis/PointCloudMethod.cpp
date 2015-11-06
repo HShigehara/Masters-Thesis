@@ -178,10 +178,12 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::planeSegmentation(pcl::
 	//Mandatory
 	seg.setModelType(pcl::SACMODEL_PLANE);
 	seg.setMethodType(pcl::SAC_RANSAC);
-	seg.setDistanceThreshold(0.2);
+	seg.setDistanceThreshold(0.01);
 
 	seg.setInputCloud(inputPointCloud->makeShared());
 	seg.segment(*inliers, *coefficients);
+
+
 
 	//if (inliers->indices.size() == 0){
 	//	PCL_ERROR("Cloud not estimate a planar model for the given dataset.");
@@ -202,7 +204,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::planeSegmentation(pcl::
 
 	}
 
-	filtered = inputPointCloud->makeShared();
-	cout << "TEST => " << filtered->size() << endl;
+	pcl::ExtractIndices<pcl::PointXYZRGB> extract;
+	extract.setInputCloud(inputPointCloud);
+	extract.setIndices(inliers);
+	extract.setNegative(false);
+	extract.filter(*filtered);
+
+	//filtered = inputPointCloud->makeShared();
+	//cout << "TEST => " << filtered->size() << endl;
 	return filtered;
 }

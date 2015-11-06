@@ -50,10 +50,12 @@ using namespace cv; //!<名前空間
 #include <pcl\kdtree\kdtree_flann.h> //スムージング用
 #include <pcl\surface\mls.h> //スムージング用
 #include <pcl\filters\voxel_grid.h> //ダウンサンプリング用
+//平面検出・除去処理用(c61)
 #include <pcl\ModelCoefficients.h>
 #include <pcl\sample_consensus\method_types.h>
 #include <pcl\sample_consensus\model_types.h>
 #include <pcl\segmentation\sac_segmentation.h>
+#include <pcl\filters\extract_indices.h>
 #include <pcl\PCLPointField.h>
 
 /* 定義 */

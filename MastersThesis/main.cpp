@@ -168,6 +168,8 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			//ポイントクラウドの取得(c57)
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
 			
+
+			//PCLの処理
 			//外れ値除去(c59)
 			//cloud = pcm.passThroughFilter(cloud); //Kinectから取得した初期の外れ値を除去(c60)
 			//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)

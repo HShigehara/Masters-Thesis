@@ -246,9 +246,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 			point.y = -real.y;
 			point.z = real.z;
 			
-			point.r = 0;
-			point.g = 0;
-			point.b = 0;
+			point.r = 255;
+			point.g = 255;
+			point.b = 255;
 
 			points->push_back(point);
 		}
