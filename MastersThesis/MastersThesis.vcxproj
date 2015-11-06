@@ -87,7 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ChangeLog.txt" />
-    <Text Include="ReadMe.txt" />
+    <Text Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DPathTrackingUsingtheKINECT.hpp" />
