@@ -66,6 +66,18 @@ void System::endMessage(int cNum)
 	return;
 }
 
+/*!
+* @brief System::endMessage().プログラム終了時のメッセージ
+* @param なし
+* @return なし
+*/
+void System::endMessage()
+{
+	cout << "==================================================================" << endl;
+	cout << "Closing the Program...." << endl;
+	cout << "==================================================================" << endl;
+	return;
+}
 
 /*!
 * @brief System::makeDirectory().ディレクトリを作成

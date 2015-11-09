@@ -175,21 +175,70 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::Point
 	seg.setModelType(pcl::SACMODEL_PLANE);
 	seg.setMethodType(pcl::SAC_RANSAC);
 	seg.setDistanceThreshold(threshold);
+	
 	seg.setInputCloud(inputPointCloud->makeShared());
 	seg.segment(*inliers, *coefficients);
 
-	for (size_t i = 0; i < inliers->indices.size(); ++i){
+
+	//pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZRGB>());
+	//int i = 0, nr_points = (int)inputPointCloud->points.size();
+	//while (inputPointCloud->points.size() > 0.3*nr_points)
+	//{
+	//	seg.setInputCloud(inputPointCloud);
+	//	seg.segment(*inliers, *coefficients);
+	//	if (inliers->indices.size() == 0)
+	//	{
+	//		cout << "Could not estimate a planar model for the given dataset." << endl;
+	//		break;
+	//	}
+	//	pcl::ExtractIndices<pcl::PointXYZRGB> extract;
+	//	extract.setInputCloud(inputPointCloud);
+	//	extract.setIndices(inliers);
+	//	extract.setNegative(false);
+	//	extract.filter(*filtered);
+	//	extract.setNegative(true);
+	//	extract.filter(*cloud_f);
+	//	*inputPointCloud = *cloud_f;
+	//}
+
+	//pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGB>);
+	//tree->setInputCloud(filtered);
+	//vector<pcl::PointIndices> cluster_indices;
+	//pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> ec;
+	//ec.setClusterTolerance(0.02); //cm
+	//ec.setMinClusterSize(100);
+	//ec.setMaxClusterSize(25000);
+	//ec.setSearchMethod(tree);
+	//ec.setInputCloud(filtered);
+	//ec.extract(cluster_indices);
+	
+	//int j = 0;
+	//for (vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
+	//{
+	//	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
+	//	for (vector<int>::const_iterator pit = it->indices.begin(); pit != it->indices.end(); ++pit)
+	//	{
+	//		cloud_cluster->points.push_back(filtered->points[*pit]);
+	//	}
+	//	cloud_cluster->width = cloud_cluster->points.size();
+	//	cloud_cluster->height = 1;
+	//	cloud_cluster->is_dense = true;
+	//	filtered = cloud_cluster;
+	//	j++;
+	//}
+
+	/*for (size_t i = 0; i < inliers->indices.size(); ++i){
 		inputPointCloud->points[inliers->indices[i]].r = 255;
 		inputPointCloud->points[inliers->indices[i]].g = 255;
 		inputPointCloud->points[inliers->indices[i]].b = 255;
-	}
+	}*/
 
 	pcl::ExtractIndices<pcl::PointXYZRGB> extract;
 	extract.setInputCloud(inputPointCloud);
 	extract.setIndices(inliers);
 	extract.setNegative(negative);
 	extract.filter(*filtered);
-
+	
 	cout << "after Extract Plane => " << filtered->size() << endl;
 	return filtered;
 }

@@ -54,14 +54,14 @@ void onMouse(int event, int x, int y, int flags, void* param); //!<マウス操作
  */
 int main()
 {
-RETRY: //goto文.計測が上手くいかなかったらリセットする用
+//RETRY: //goto文.計測が上手くいかなかったらリセットする用
 	//インスタンスの生成
 	System sys; //!<システム的なメソッドをまとめているクラス
 	RouteDrawing routedraw; //!<RouteDrawingクラスのインスタンスを生成
 	LeastSquareMethod lsm; //!<最小二乗法を行うクラスのインスタンスを生成(c49)
 
 	//変数の宣言
-	int checkNum; //!<プログラム終了時にデータを保存するか確認するための変数(c38)
+	//int checkNum; //!<プログラム終了時にデータを保存するか確認するための変数(c38)
 	//outputData outputData[OUTPUTDATA_MAX]; //!<出力するデータを宣言．最大10000個(c41)
 
 	//ファイル名の定義(c39)
@@ -141,7 +141,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 		//namedWindow(mainWindowName, CV_WINDOW_AUTOSIZE | CV_WINDOW_FREERATIO); //動画像用のウインドウを表示(c31)
 		//namedWindow(winname, CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO); //歪み補正後に確認する用
 
-		while (1){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．
+		while (!pcm.viewer->wasStopped()/*1*/){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．(c63)CloudViewerが終了処理('q'キーを入力)したらプログラムが終了する
 			//タイマーを導入．スタート地点(c18)
 			f = 1000.0 / getTickFrequency();
 			start = getTickCount(); //スタート
@@ -183,7 +183,7 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 			cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.003); //0.002 < radius < ◯．小さいほど除去される
 
 			//平面検出(c61)
-			cloud = pcm.extractPlane(cloud, true, 0.05, false);
+			cloud = pcm.extractPlane(cloud, true, 0.01, false); //Default=0.003
 			cout << "==============================================================" << endl;
 			pcm.viewer->showCloud(cloud);
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
@@ -257,45 +257,46 @@ RETRY: //goto文.計測が上手くいかなかったらリセットする用
 
 
 			//終了のためのキー入力チェック兼表示のためのウェイトタイム
-			kinect.key = waitKey(1);
-			if (kinect.key == 'q'){ //計測終了
+			//kinect.key = waitKey(1);
+			//if (kinect.key == 'q'){ //計測終了
 				//sys.outputAllData(&outputDataName, outputData, countDataNum);
 				//routedraw.plot3D(outputDataName); //(c4)
-				destroyAllWindows();
-				break;
-			}
-			else if (kinect.key == 'r'){ //再計測するときに前のファイルを削除しておく(c31)
+				//destroyAllWindows();
+				//break;
+			//}
+			//else if (kinect.key == 'r'){ //再計測するときに前のファイルを削除しておく(c31)
 				//destroyAllWindows(); //OpenCVで作成したウインドウを全て削除する(c35)
-				sys.removeDirectory();
-				cout << "Data Removed." << endl;
-				goto RETRY;
-			}
+				//sys.removeDirectory();
+				//cout << "Data Removed." << endl;
+				//goto RETRY;
+			//}
 		}
 	}
 
 	catch (exception& ex){ //例外処理
 		cout << ex.what() << endl;
-		destroyAllWindows(); //OpenCVで作成したウインドウを全て削除する(c35)
+		//destroyAllWindows(); //OpenCVで作成したウインドウを全て削除する(c35)
 		//異常終了した時はデータを保存する必要がないので削除
-		sys.removeDirectory();
-		cout << "Data Removed." << endl;
-		return -1;
+		//sys.removeDirectory();
+		//cout << "Data Removed." << endl;
+		//return -1;
 	}
 
 	//データを保存するかの確認(c27)
-	cout << "Save Data?" << endl;
-	checkNum = sys.alternatives(); //'1'なら保存，'0'なら削除
+	//cout << "Save Data?" << endl;
+	//checkNum = sys.alternatives(); //'1'なら保存，'0'なら削除
 
 
-	if (checkNum == 0){ //削除するとき(c55)
-		sys.removeDirectory(/*checkNum*/); //ディレクトリを削除するかどうか
-	}
-	else{ //保存するとき
-		routedraw.gnuplotScript(/*checkNum, */&outputDataName); //後で3D座標をプロットする用のgnuplotスクリプトを作るかどうか
-		routedraw.gnuplotScriptCoG(/*checkNum, */&centerofgravityDataName); //後で重心座標をプロットする用のgnuplotスクリプトを作るかどうか(c52)
-	}
+	//if (checkNum == 0){ //削除するとき(c55)
+		//sys.removeDirectory(/*checkNum*/); //ディレクトリを削除するかどうか
+	//}
+	//else{ //保存するとき
+		//routedraw.gnuplotScript(/*checkNum, */&outputDataName); //後で3D座標をプロットする用のgnuplotスクリプトを作るかどうか
+		//routedraw.gnuplotScriptCoG(/*checkNum, */&centerofgravityDataName); //後で重心座標をプロットする用のgnuplotスクリプトを作るかどうか(c52)
+	//}
 
-	sys.endMessage(checkNum);
+	//sys.endMessage(checkNum);
+	sys.endMessage();
 
 	return 0;
 }

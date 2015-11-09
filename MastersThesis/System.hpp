@@ -24,6 +24,7 @@ public:
 	~System();
 	void startMessage(); //!<プログラム開始時のメッセージを表示(c26)
 	void endMessage(int cNum); //!<プログラム終了時のメッセージを表示(c38)
+	void endMessage(); //!<プログラム終了時のメッセージを表示(c63)
 	void makeDirectory(); //ディレクトリの作成
 	void removeDirectory(/*int cNum*/); //!<取得したデータが不要だった場合ディレクトリを削除する
 	int alternatives(); //!<数字の入力をチェックする

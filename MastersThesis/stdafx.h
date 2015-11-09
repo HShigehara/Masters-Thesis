@@ -56,6 +56,10 @@ using namespace cv; //!<名前空間
 #include <pcl\sample_consensus\model_types.h>
 #include <pcl\segmentation\sac_segmentation.h>
 #include <pcl\filters\extract_indices.h>
+//クラスタリング(c62)
+#include <pcl\features\normal_3d.h>
+#include <pcl\segmentation\extract_clusters.h>
+
 #include <pcl\PCLPointField.h>
 
 /* 定義 */
