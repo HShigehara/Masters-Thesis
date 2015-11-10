@@ -89,7 +89,7 @@ int main()
 
 		Kinect kinect; //Kinectクラスのインスタンスを生成
 		ImageProcessing imgproc; //Imageprocessingクラスのインスタンスを生成
-		PointCloudMethod pcm; //PointCloudMethodクラスのインスタンスを生成(c57)
+		PointCloudMethod pcm(false,false,false,false); //PointCloudMethodクラスのインスタンスを生成(c57)
 
 		//動画保存用
 		//VideoWriter writer; //動画保存用 
@@ -176,16 +176,28 @@ int main()
 			//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)
 			//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
 
-			//ダウンサンプリング処理(c59)
-			cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
-			
-			//スムージング処理(c60)
-			cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.003); //0.002 < radius < ◯．小さいほど除去される
+			if (pcm.flag_downsampling == true){
+				//ダウンサンプリング処理(c59)
+				//cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.0005, 0.0005, 0.0005); //Default=all 0.003
+				cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
+			}
 
-			//平面検出(c61)
-			cloud = pcm.extractPlane(cloud, true, 0.01, false); //Default=0.003
+			if (pcm.flag_downsampling == true && pcm.flag_MLS == true){
+				//スムージング処理(c60)
+				cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.008); //0.002 < radius < ◯．小さいほど除去される
+			}
+
+			if (pcm.flag_extractPlane == true){
+				//平面検出(c61)
+				cloud = pcm.extractPlane(cloud, true, 0.03, false); //Default=0.03(前処理なしの場合)
+			}
+
 			cout << "==============================================================" << endl;
 			pcm.viewer->showCloud(cloud);
+
+			pcm.flagChecker(); //各点群処理のフラグをチェックするメソッド(c64)
+
+
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 
 
@@ -270,6 +282,8 @@ int main()
 				//cout << "Data Removed." << endl;
 				//goto RETRY;
 			//}
+
+			//system("cls"); //コンソール内の表示をリセット(c64)
 		}
 	}
 

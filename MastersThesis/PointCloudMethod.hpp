@@ -21,12 +21,14 @@ class PointCloudMethod{
 private:
 	//string cloudViewerName; //クラウドビューワーのウインドウ名
 
-
 public:
 	PointCloudMethod(); //コンストラクタ
+	PointCloudMethod(bool flag_RO, bool flag_DS, bool flag_MLS, bool flag_EP); //コンストラクタ(c64)
 	~PointCloudMethod(); //デストラクタ
 
 	void initializePointCloudViewer(string cloudViewerName);
+	void flagChecker(); //フラグを判定するメソッド(c64)
+
 
 	//外れ値除去
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud);
@@ -46,7 +48,12 @@ public:
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 	pcl::visualization::CloudViewer *viewer;
 
-
+	//各点群処理を行うか否かのフラグ変数(c64)
+	bool flag_removeOutlier;
+	bool flag_downsampling;
+	bool flag_MLS;
+	bool flag_extractPlane;
+	//bool flag_viewerRunning;
 };
 
 /* インクルードガードの終了 */

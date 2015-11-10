@@ -39,10 +39,16 @@ void System::startMessage()
 {
 	cout << "==================================================================" << endl;
 	cout << " Starting the Program...." << endl;
-	cout << " Please Enclose the Object You Want to Track." << endl;
+	//cout << " Please Enclose the Object You Want to Track." << endl;
 	cout << " If You Enter a 'q' Key, the Program Terminates. (On the Window.)" << endl;
-	cout << " If You Enter a 'r' Key, the Program Restart. (On the Window.)" << endl;
+	//cout << " If You Enter a 'r' Key, the Program Restart. (On the Window.)" << endl;
 	//cout << " To Initialize Tracking, Re-Select the Object with Mouse." << endl;
+	cout << "\n";
+	cout << " Switch ON/OFF Point Cloud Processing." << endl;
+	cout << "  Remove Outlier \t -> \t Press 'v' Key." << endl;
+	cout << "  Downsampling \t\t -> \t Press 'b' Key." << endl;
+	cout << "  Moving Least Square \t -> \t Press 'n' Key." << endl;
+	cout << "  Extract Plane \t -> \t Press 'm' Key." << endl;
 	cout << "==================================================================\n" << endl;
 
 	return;

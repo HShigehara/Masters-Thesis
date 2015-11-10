@@ -243,8 +243,8 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Kinect::getPointCloud(Mat& Mat_image)
 			Vector4 real = NuiTransformDepthImageToSkeleton(depthX, depthY, distance, CAMERA_RESOLUTION);
 			pcl::PointXYZRGB point;
 			point.x = real.x;
-			point.y = -real.y;
-			point.z = real.z;
+			point.y = real.y;
+			point.z = real.z; //PCLは右手系で表現されるため-をつけている
 			
 			//テクスチャ
 			Vec4b color = image.at<Vec4b>(colorY, colorX);
