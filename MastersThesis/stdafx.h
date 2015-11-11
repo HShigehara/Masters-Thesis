@@ -60,6 +60,8 @@ using namespace cv; //!<–¼‘O‹óŠÔ
 #include <pcl\features\normal_3d.h>
 #include <pcl\segmentation\extract_clusters.h>
 
+#include <boost\thread\thread.hpp>
+
 #include <pcl\PCLPointField.h>
 
 /* ’è‹` */

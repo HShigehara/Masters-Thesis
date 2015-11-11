@@ -83,7 +83,7 @@ int main()
 	//ポイントクラウド関係の変数(c57)
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; //ポイントクラウド保存用(c57)
 
-		//メインの処理
+	//メインの処理
 	try{
 		sys.startMessage(); //プログラム開始時のメッセージを表示
 
@@ -167,6 +167,7 @@ int main()
 
 			//ポイントクラウドの取得(c57)
 			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
+			pcm.flagChecker(); //各点群処理のフラグをチェックするメソッド(c64)
 			cout << "==============================================================" << endl;
 			cout << "Original PointCloud Size => " << cloud->size() << endl;
 
@@ -193,10 +194,8 @@ int main()
 			}
 
 			cout << "==============================================================" << endl;
+
 			pcm.viewer->showCloud(cloud);
-
-			pcm.flagChecker(); //各点群処理のフラグをチェックするメソッド(c64)
-
 
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 

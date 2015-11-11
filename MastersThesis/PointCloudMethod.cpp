@@ -53,6 +53,8 @@ PointCloudMethod::~PointCloudMethod()
 void PointCloudMethod::initializePointCloudViewer(string cloudViewerName)
 {
 	viewer = new pcl::visualization::CloudViewer(cloudViewerName);
+	//boost::shared_ptr<pcl::visualization::PCLVisualizer> __viewer(new pcl::visualization::PCLVisualizer(cloudViewerName)); //仮
+	//__viewer(new pcl::visualization::PCLVisualizer(cloudViewerName));
 	return;
 }
 
@@ -216,7 +218,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::Point
 
 	//セグメンテーションオブジェクトの生成
 	pcl::SACSegmentation<pcl::PointXYZRGB> seg;
-	
+
 	//オプション
 	seg.setOptimizeCoefficients(optimize);
 
@@ -224,7 +226,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::Point
 	seg.setModelType(pcl::SACMODEL_PLANE);
 	seg.setMethodType(pcl::SAC_RANSAC);
 	seg.setDistanceThreshold(threshold);
-	
+
 	seg.setInputCloud(inputPointCloud->makeShared());
 	seg.segment(*inliers, *coefficients);
 
@@ -260,7 +262,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::Point
 	//ec.setSearchMethod(tree);
 	//ec.setInputCloud(filtered);
 	//ec.extract(cluster_indices);
-	
+
 	//int j = 0;
 	//for (vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
 	//{
@@ -280,14 +282,14 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudMethod::extractPlane(pcl::Point
 		inputPointCloud->points[inliers->indices[i]].r = 255;
 		inputPointCloud->points[inliers->indices[i]].g = 255;
 		inputPointCloud->points[inliers->indices[i]].b = 255;
-	}*/
+		}*/
 
 	pcl::ExtractIndices<pcl::PointXYZRGB> extract;
 	extract.setInputCloud(inputPointCloud);
 	extract.setIndices(inliers);
 	extract.setNegative(negative);
 	extract.filter(*filtered);
-	
+
 	cout << "after Extract Plane => " << filtered->size() << endl;
 	return filtered;
 }

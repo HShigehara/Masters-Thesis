@@ -19,7 +19,6 @@
 */
 class PointCloudMethod{
 private:
-	//string cloudViewerName; //クラウドビューワーのウインドウ名
 
 public:
 	PointCloudMethod(); //コンストラクタ
@@ -45,15 +44,15 @@ public:
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool optimize, double threshold, bool negative);
 
 	//クラウドビューワー用
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+	//pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 	pcl::visualization::CloudViewer *viewer;
+
 
 	//各点群処理を行うか否かのフラグ変数(c64)
 	bool flag_removeOutlier;
 	bool flag_downsampling;
 	bool flag_MLS;
 	bool flag_extractPlane;
-	//bool flag_viewerRunning;
 };
 
 /* インクルードガードの終了 */
