@@ -49,10 +49,10 @@ public:
 
 
 	//各点群処理を行うか否かのフラグ変数(c64)
-	bool flag_removeOutlier;
-	bool flag_downsampling;
-	bool flag_MLS;
-	bool flag_extractPlane;
+	bool FlagRemoveOutlier;
+	bool FlagDownsampling;
+	bool FlagMLS;
+	bool FlagExtractPlane;
 };
 
 /* インクルードガードの終了 */

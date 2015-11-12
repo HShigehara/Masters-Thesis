@@ -17,6 +17,8 @@
 */
 System::System()
 {
+	FlagStartTimer = false; //スタート用のタイマーが実行されたかのフラグを初期化(c65)
+	FlagEndTimer = false; //終了用のタイマーが実行されたかのフラグを初期化(c65)
 	time = 0.0; //時間計測用の変数を初期化(c65)
 }
 
@@ -44,7 +46,7 @@ void System::startMessage()
 	//cout << " If You Enter a 'r' Key, the Program Restart. (On the Window.)" << endl;
 	//cout << " To Initialize Tracking, Re-Select the Object with Mouse." << endl;
 	cout << "\n";
-	cout << " Switch ON/OFF Point Cloud Processing." << endl;
+	cout << " Switching of Point Cloud Processing." << endl;
 	cout << "  Remove Outlier \t -> \t Press 'v' Key." << endl;
 	cout << "  Downsampling \t\t -> \t Press 'b' Key." << endl;
 	cout << "  Moving Least Square \t -> \t Press 'n' Key." << endl;
@@ -94,19 +96,76 @@ void System::startTimer()
 {
 	f = 1000.0 / getTickFrequency();
 	start = getTickCount(); //スタート
+	FlagStartTimer = true; //スタート用のタイマーが実行されたのでフラグをtrueに
 	return;
 }
 
 /*!
 * @brief メソッドendTimer().タイマーを終了する
 * @param なし
-* @return double time
+* @return なし
 */
 void System::endTimer()
 {
-	end = getTickCount();
-	time = (end - start) * f;
+	if (FlagStartTimer == true){
+		end = getTickCount();
+		time = (end - start) * f;
+		FlagEndTimer = true;
+	}
+	else{
+		cerr << "Before you use endTimer() method, please run the System::startTimer()." << endl;
+		exit(-1);
+	}
 	return;
+}
+
+/*!
+* @brief メソッドgetTime().計測した時間を取得する(c65)
+* @param なし
+* @return double time
+*/
+double System::getProcessTimeinMiliseconds()
+{
+	if (FlagStartTimer == true && FlagEndTimer == true){
+		return time;
+	}
+	else if (FlagStartTimer == false && FlagEndTimer == true){
+		cerr << "Before you use getProcessTimeinMiliseconds() method, please run the System::startTimer()." << endl;
+		exit(-1);
+	}
+	else if (FlagStartTimer==true && FlagEndTimer == false){
+		cerr << "Before you use getProcessTimeinMiliseconds() method, please run the System::endTimer()." << endl;
+		exit(-1);
+	}
+	else{
+		cerr << "Before you use getProcessTimeinMiliseconds() method, please run the System::startTimer() and System::endTimer()." << endl;
+		exit(-1);
+	}
+}
+
+/*!
+* @brief メソッドgetFrameRate().フレームレートを取得する(c65)
+* @param なし
+* @return double time
+*/
+double System::getFrameRate()
+{
+	if (FlagStartTimer == true && FlagEndTimer == true){
+		fps = 1000.0 / time;
+		return fps;
+	}
+	else if (FlagStartTimer == false && FlagEndTimer == true){
+		cerr << "Before you use getFrameRate() method, please run the System::startTimer()." << endl;
+		exit(-1);
+	}
+	else if (FlagStartTimer == true && FlagEndTimer == false){
+		cerr << "Before you use getFrameRate() method, please run the System::endTimer()." << endl;
+		exit(-1);
+	}
+	else{
+		cerr << "Before you use getFrameRate() method, please run the System::startTimer() and System::endTimer()." << endl;
+		exit(-1);
+	}
 }
 
 /*!

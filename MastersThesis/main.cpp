@@ -168,18 +168,18 @@ int main()
 			//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)
 			//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
 
-			if (pcm.flag_downsampling == true){
+			if (pcm.FlagDownsampling == true){
 				//ダウンサンプリング処理(c59)
-				//pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.0005, 0.0005, 0.0005); //Default=all 0.003
-				pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.003, 0.003, 0.003); //Default=all 0.003
+				pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.002, 0.0002, 0.0002); //Default=all 0.003
+				//pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.003, 0.003, 0.003); //Default=all 0.003
 			}
 
-			if (pcm.flag_downsampling == true && pcm.flag_MLS == true){
+			if (pcm.FlagDownsampling == true && pcm.FlagMLS == true){
 				//スムージング処理(c60)
 				pcm.cloud = pcm.smoothingUsingMovingLeastSquare(pcm.cloud, true, true, 0.008); //0.002 < radius < ◯．小さいほど除去される
 			}
 
-			if (pcm.flag_extractPlane == true){
+			if (pcm.FlagExtractPlane == true){
 				//平面検出(c61)
 				pcm.cloud = pcm.extractPlane(pcm.cloud, true, 0.03, false); //Default=0.03(前処理なしの場合)
 			}
@@ -253,8 +253,7 @@ int main()
 
 			//PCLのフレームレートを計算する用(c61)
 			sys.endTimer(); //タイマーを終了(c65)
-			sys.fps = 1000.0 / sys.time;
-			cout << sys.fps << " fps\n" << endl;
+			cout << sys.getProcessTimeinMiliseconds() << "[ms], " << sys.getFrameRate() << " fps\n" << endl;
 
 
 			//終了のためのキー入力チェック兼表示のためのウェイトタイム

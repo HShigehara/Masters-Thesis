@@ -28,10 +28,10 @@ PointCloudMethod::PointCloudMethod()
 PointCloudMethod::PointCloudMethod(bool flag_RO, bool flag_DS, bool flag_MLS, bool flag_EP)
 {
 	//コンストラクタ
-	flag_removeOutlier = flag_RO;
-	flag_downsampling = flag_DS;
-	flag_MLS = flag_MLS;
-	flag_extractPlane = flag_EP;
+	FlagRemoveOutlier = flag_RO;
+	FlagDownsampling = flag_DS;
+	FlagMLS = flag_MLS;
+	FlagExtractPlane = flag_EP;
 }
 
 /*!
@@ -67,21 +67,21 @@ void PointCloudMethod::flagChecker()
 {
 	if (GetAsyncKeyState('V')){
 		//cout << "Vが入力されたので、外れ値除去処理のフラグを反転" << endl;
-		flag_removeOutlier = !flag_removeOutlier;
+		FlagRemoveOutlier = !FlagRemoveOutlier;
 	}
 	if (GetAsyncKeyState('B')){
 		//cout << "Bが入力されたので、ダウンサンプリング処理のフラグを反転" << endl;
-		flag_downsampling = !flag_downsampling;
+		FlagDownsampling = !FlagDownsampling;
 	}
 	if (/*flag_downsampling == true && */GetAsyncKeyState('N')){
 		//cout << "Nが入力されたので、MLS処理のフラグを反転" << endl;
-		flag_MLS = !flag_MLS;
+		FlagMLS = !FlagMLS;
 	}
 	if (GetAsyncKeyState('M')){
 		//cout << "Mが入力されたので、平面検出のフラグを反転" << endl;
-		flag_extractPlane = !flag_extractPlane;
+		FlagExtractPlane = !FlagExtractPlane;
 	}
-	cout << "外れ値 => " << flag_removeOutlier << " ダウンサンプリング => " << flag_downsampling << " MLS => " << flag_MLS << " 平面検出 => " << flag_extractPlane << endl;
+	cout << "外れ値 => " << FlagRemoveOutlier << " ダウンサンプリング => " << FlagDownsampling << " MLS => " << FlagMLS << " 平面検出 => " << FlagExtractPlane << endl;
 	return;
 }
 /*!
