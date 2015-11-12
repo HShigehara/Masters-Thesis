@@ -17,7 +17,7 @@
 */
 System::System()
 {
-	//コンストラクタの処理はなし
+	time = 0.0; //時間計測用の変数を初期化(c65)
 }
 
 /*!
@@ -82,6 +82,30 @@ void System::endMessage()
 	cout << "==================================================================" << endl;
 	cout << "Closing the Program...." << endl;
 	cout << "==================================================================" << endl;
+	return;
+}
+
+/*!
+ * @brief メソッドstartTimer().タイマーを開始する
+ * @param なし
+ * @return なし
+ */
+void System::startTimer()
+{
+	f = 1000.0 / getTickFrequency();
+	start = getTickCount(); //スタート
+	return;
+}
+
+/*!
+* @brief メソッドendTimer().タイマーを終了する
+* @param なし
+* @return double time
+*/
+void System::endTimer()
+{
+	end = getTickCount();
+	time = (end - start) * f;
 	return;
 }
 

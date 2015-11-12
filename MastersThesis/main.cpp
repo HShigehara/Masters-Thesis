@@ -81,7 +81,7 @@ int main()
 	Mat mExtractedBlack_img; //!<オープニング後の二値画像から抽出された黒い座標を格納している変数(c40)
 
 	//ポイントクラウド関係の変数(c57)
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; //ポイントクラウド保存用(c57)
+	//pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; //ポイントクラウド保存用(c57)
 
 	//メインの処理
 	try{
@@ -102,10 +102,7 @@ int main()
 		int countDataNum; //出力されたデータ数をカウントする(c39)
 
 		//フレームレート計算に必要な変数の宣言
-		double f;
-		double sumTime; //合計の時間をカウントする変数
-		double time; //1フレームあたりの時間(c39)
-		double fps; //フレームレート(c39)
+		//double sumTime; //合計の時間をカウントする変数
 
 		//ウインドウ名とファイル名の定義
 		const string mainWindowName = "動画像"; //メインウインドウの名前をつけておく．(c31)
@@ -116,14 +113,9 @@ int main()
 		//sys.loadInternalCameraParameter(cameraParameterName); //カメラパラメータを読み込む(c54)
 		////const string winname = "歪み補正後"; //歪み補正後に確認する用
 
-		//タイマー用変数
-		int64 start;
-		int64 end; //終了時のタイマー
-
 		//変数の初期化
 		countDataNum = 0;
-		sumTime = 0.0; //合計の時間をカウントする変数
-		time = 0.0; //1フレームの時間
+		//sumTime = 0.0; //合計の時間をカウントする変数
 		realPoint.x = 0.0; //3次元座標のx座標
 		realPoint.y = 0.0; //3次元座標のy座標
 		realPoint.z = 0.0; //3次元座標のx座標
@@ -142,9 +134,8 @@ int main()
 		//namedWindow(winname, CV_WINDOW_AUTOSIZE || CV_WINDOW_FREERATIO); //歪み補正後に確認する用
 
 		while (!pcm.viewer->wasStopped()/*1*/){ //(c3).メインループ．1フレームごとの処理を繰り返し行う．(c63)CloudViewerが終了処理('q'キーを入力)したらプログラムが終了する
-			//タイマーを導入．スタート地点(c18)
-			f = 1000.0 / getTickFrequency();
-			start = getTickCount(); //スタート
+			//タイマー開始(c65)
+			sys.startTimer();
 
 			//(c25)
 			//setMouseCallback(mainWindowName, onMouse, 0); //マウスコールバック関数をセット(c31)
@@ -166,10 +157,10 @@ int main()
 			//imgproc.showImage("RGB(TEST)", image);
 
 			//ポイントクラウドの取得(c57)
-			cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
+			pcm.cloud = kinect.getPointCloud(depth_image); //ポイントクラウドの取得(c57)
 			pcm.flagChecker(); //各点群処理のフラグをチェックするメソッド(c64)
 			cout << "==============================================================" << endl;
-			cout << "Original PointCloud Size => " << cloud->size() << endl;
+			cout << "Original PointCloud Size => " << pcm.cloud->size() << endl;
 
 			//PCLの処理
 			//外れ値除去(c59)
@@ -179,23 +170,23 @@ int main()
 
 			if (pcm.flag_downsampling == true){
 				//ダウンサンプリング処理(c59)
-				//cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.0005, 0.0005, 0.0005); //Default=all 0.003
-				cloud = pcm.downSamplingUsingVoxelGridFilter(cloud, 0.003, 0.003, 0.003); //Default=all 0.003
+				//pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.0005, 0.0005, 0.0005); //Default=all 0.003
+				pcm.cloud = pcm.downSamplingUsingVoxelGridFilter(pcm.cloud, 0.003, 0.003, 0.003); //Default=all 0.003
 			}
 
 			if (pcm.flag_downsampling == true && pcm.flag_MLS == true){
 				//スムージング処理(c60)
-				cloud = pcm.smoothingUsingMovingLeastSquare(cloud, true, true, 0.008); //0.002 < radius < ◯．小さいほど除去される
+				pcm.cloud = pcm.smoothingUsingMovingLeastSquare(pcm.cloud, true, true, 0.008); //0.002 < radius < ◯．小さいほど除去される
 			}
 
 			if (pcm.flag_extractPlane == true){
 				//平面検出(c61)
-				cloud = pcm.extractPlane(cloud, true, 0.03, false); //Default=0.03(前処理なしの場合)
+				pcm.cloud = pcm.extractPlane(pcm.cloud, true, 0.03, false); //Default=0.03(前処理なしの場合)
 			}
 
 			cout << "==============================================================" << endl;
 
-			pcm.viewer->showCloud(cloud);
+			pcm.viewer->showCloud(pcm.cloud);
 
 			//imgproc.showImage("DEPTH(TEST)", depth_image);
 
@@ -261,10 +252,9 @@ int main()
 			//}
 
 			//PCLのフレームレートを計算する用(c61)
-			end = getTickCount();
-			time = (end - start) * f;
-			fps = 1000.0 / time;
-			cout << fps << " fps\n" << endl;
+			sys.endTimer(); //タイマーを終了(c65)
+			sys.fps = 1000.0 / sys.time;
+			cout << sys.fps << " fps\n" << endl;
 
 
 			//終了のためのキー入力チェック兼表示のためのウェイトタイム

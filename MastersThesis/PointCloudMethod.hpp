@@ -44,7 +44,7 @@ public:
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointCloud, bool optimize, double threshold, bool negative);
 
 	//クラウドビューワー用
-	//pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 	pcl::visualization::CloudViewer *viewer;
 
 

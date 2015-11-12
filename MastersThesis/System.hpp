@@ -18,6 +18,12 @@ class System
 {
 private:
 	char fullPathName[NOC]; //!<フルパスを取得(c38)
+	
+	//タイマー系の変数(c65)
+	int64 start; //スタート時のタイマー変数
+	double f;
+	int64 end; //終了時のタイマー変数
+
 
 public:
 	System();
@@ -25,6 +31,10 @@ public:
 	void startMessage(); //!<プログラム開始時のメッセージを表示(c26)
 	void endMessage(int cNum); //!<プログラム終了時のメッセージを表示(c38)
 	void endMessage(); //!<プログラム終了時のメッセージを表示(c63)
+
+	void startTimer(); //!<タイマーを開始(c65)
+	void endTimer(); //!<タイマーを終了(c65)
+
 	void makeDirectory(); //ディレクトリの作成
 	void removeDirectory(/*int cNum*/); //!<取得したデータが不要だった場合ディレクトリを削除する
 	int alternatives(); //!<数字の入力をチェックする
@@ -35,6 +45,10 @@ public:
 
 	Mat internalCameraParam; //!<カメラキャリブレーションによって得られた内部パラメータ行列(c54)
 	Mat distortionCoefficients; //!<カメラキャリブレーションによって得られた歪み係数行列(c54)
+
+	//タイマー系のpublic変数(c65)
+	double time; //!<処理時間の結果
+	double fps; //!<フレームレート
 };
 
 #endif /* __SYSTEM_HPP__ */
