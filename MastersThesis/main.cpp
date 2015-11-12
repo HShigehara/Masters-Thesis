@@ -163,10 +163,12 @@ int main()
 			cout << "Original PointCloud Size => " << pcm.cloud->size() << endl;
 
 			//PCLの処理
-			//外れ値除去(c59)
-			//cloud = pcm.passThroughFilter(cloud); //Kinectから取得した初期の外れ値を除去(c60)
-			//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)
-			//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
+			if (pcm.FlagRemoveOutlier == true){
+				//外れ値除去(c59)
+				//cloud = pcm.passThroughFilter(cloud); //Kinectから取得した初期の外れ値を除去(c60)
+				//cloud = pcm.removeOutlier(cloud); //統計的な外れ値除去(c60)
+				//cloud = pcm.radiusOutlierRemoval(cloud); //半径を指定して外れ値を除去(c60)
+			}
 
 			if (pcm.FlagDownsampling == true){
 				//ダウンサンプリング処理(c59)

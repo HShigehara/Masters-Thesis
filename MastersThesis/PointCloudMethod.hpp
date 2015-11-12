@@ -47,7 +47,6 @@ public:
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 	pcl::visualization::CloudViewer *viewer;
 
-
 	//各点群処理を行うか否かのフラグ変数(c64)
 	bool FlagRemoveOutlier;
 	bool FlagDownsampling;
